@@ -1,12 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const Applicant = require("./models/models"); // Adjust the path as necessary
 const { createPDF, createPDFMain } = require("./utils/pdfService"); // Adjust the path as necessary
 const { sendEmail } = require("./services/mailService"); // Adjust the path as necessary
 const app = express();
-
+app.use(cors());
 app.use(bodyParser.json());
 require("dotenv").config();
 
@@ -33,16 +34,18 @@ app.post("/submit-form", async (req, res) => {
     ];
 
     // Specify the recipient's email address dynamically or use a fixed address for testing
-     // Replace with actual recipient email address
+    // Replace with actual recipient email address
 
     // Send the email with the PDF attachment
     await sendEmail(attachments, req.body, (err, succ) => {
-      return console.log(err, succ,"errorrrrr");
+      return console.log(err, succ, "errorrrrr");
     });
 
     res
       .status(200)
-      .json({ message: `Application submitted and email sent successfully to ${req.body.email}` });
+      .json({
+        message: `Application submitted and email sent successfully to ${req.body.email}`,
+      });
   } catch (error) {
     console.error("Submission error:", error);
     res.status(500).json({ message: "Error processing application", error });
