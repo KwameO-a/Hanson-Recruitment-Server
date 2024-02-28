@@ -71,19 +71,27 @@ function createPDFs(formData) {
     });
   });
 }
-
+const { Buffer } = require('buffer');
 function createPDF(formData) {
   return new Promise((resolve, reject) => {
+    const { signature, ...rest } = formData;
+    // console.log(formData, "formdata")
+    // console.log(signature);
     const doc = new PDFDocument();
     const fileName = "candidate_registration_form.pdf";
     let buffers = [];
+    const signatureBuffer = Buffer.from(signature, "base64");
     const writeStream = fs.createWriteStream(fileName);
+    fs.writeFileSync('signature.png', signatureBuffer);
     doc.pipe(writeStream);
+    doc.image('signature.png', 20, 20, { width: 100 });
+    console.log(signatureBuffer)
     doc.on("data", buffers.push.bind(buffers));
     doc.on("end", () => {
       let pdfData = Buffer.concat(buffers);
       resolve(pdfData);
     });
+
     // Add image/logo as header
     doc.image("./image/mainlogo.jpg", 50, 50, { width: 100, height: 100 });
 
@@ -127,6 +135,7 @@ function createPDF(formData) {
       "Highest Level of Qualification",
       "Position",
       "Tel",
+      "Reference Title",
       "Dates of Employment/Studies",
     ];
     const SecondLabels = [
@@ -139,12 +148,14 @@ function createPDF(formData) {
       row(doc, 180 + i * 20); // Draw row
       textInRowFirst(doc, labels[i], 190 + i * 20); // Fill first column with labels
     }
+    
 
     // Fill second column with values from formData
-    const values = Object.values(formData);
+    const values = Object.values(rest);
     for (let i = 0; i < values.length; i++) {
       textInRowSecond(doc, values[i].toUpperCase(), 190 + i * 20); // Fill second column with values
     }
+
     doc.addPage(); // Add a new page
     doc.lineCap("butt").moveTo(270, 180).lineTo(270, 700).stroke(); // Draws a vertical line at x-coordinate 270
 
