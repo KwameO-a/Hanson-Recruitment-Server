@@ -92,6 +92,8 @@ function createPDF(formData) {
       resolve(pdfData);
     });
 
+
+    
     // Add image/logo as header
     doc.image("./image/mainlogo.jpg", 50, 50, { width: 100, height: 100 });
 
@@ -135,8 +137,10 @@ function createPDF(formData) {
       "Highest Level of Qualification",
       "Position",
       "Tel",
-      "Reference Title",
-      "Dates of Employment/Studies",
+      "ReferenceTitle",
+      "Employment Start Date",
+      "Employment End Date",
+      "ReferenceEmail",
     ];
     const SecondLabels = [
       "If Hanson Recruitment are completing a new DBS for you, it will be Child and Adult Workforce. Do you need a new DBS or do you have one (child workforce/ child & adult workforce) on the update service?",
@@ -172,6 +176,16 @@ function createPDF(formData) {
     for (let i = 23; i < values.length; i++) {
       textInRowSecond(doc, values[i].toUpperCase(), 190 + i * 20); // Fill second column with values
     }
+
+    if (formData.signature) {
+      const signatureImageData = formData.signature.replace(/^data:image\/\w+;base64,/, "");
+      const signatureImageBuffer = Buffer.from(signatureImageData, 'base64');
+
+      // Adjust the positioning of the signature as necessary
+      let signaturePositionY = 700; // Example position, adjust based on your document layout
+      doc.image(signatureImageBuffer, 50, signaturePositionY, { width: 100, height: 50 });
+    }
+    
     doc.end();
 
     writeStream.on("finish", function () {

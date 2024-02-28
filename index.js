@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 require("dotenv").config();
 
 // Make sure to replace 'your-mongodb-connection-string' with your actual MongoDB connection string.
-mongoose.connect(process.env.DATABASE_URL1);
+mongoose.connect(process.env.DATABASE_URL);
 
 app.post("/submit-form", async (req, res) => {
   try {
