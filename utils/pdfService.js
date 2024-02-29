@@ -143,6 +143,7 @@ function createPDF(formData) {
       "If Yes Required, which country?",
       "Signature",
     ];
+
     for (let i = 0; i < labels.length; i++) {
       row(doc, 180 + i * 20); // Draw row
       textInRowFirst(doc, labels[i], 190 + i * 20); // Fill first column with labels
@@ -150,40 +151,50 @@ function createPDF(formData) {
 
     // Fill second column with values from formData
     const values = Object.values(rest);
-    for (let i = 0; i < values.length; i++) {
-      textInRowSecond(doc, values[i].toUpperCase(), 190 + i * 20); // Fill second column with values
+    const firstArray = values.slice(0, 26);
+    const secondArray = values.slice(26);
+    console.log(secondArray);
+    for (let i = 0; i < firstArray.length; i++) {
+      textInRowSecond(doc, firstArray[i].toUpperCase(), 190 + i * 20); // Fill second column with values
     }
 
     doc.addPage(); // Add a new page
-    // doc.lineCap("butt").moveTo(270, 180).lineTo(270, 700).stroke(); // Draws a vertical line at x-coordinate 270
+    // // doc.lineCap("butt").moveTo(270, 180).lineTo(270, 700).stroke(); // Draws a vertical line at x-coordinate 270
 
-    // Page 2
-    // Add content to the second page here
-    // doc.fontSize(24).text("Second Page Content", { align: "center" });
-    for (let i = 0; i < SecondLabels.length; i++) {
-      row(doc, 180 + i * 20); // Draw row
-      textInRowFirst(doc, SecondLabels[i], 190 + i * 20); // Fill first column with labels
-    }
-
-    // Fill second column with values from formData
-    // const values = Object.values(formData);
-    for (let i = 25; i < values.length; i++) {
-      textInRowSecond(doc, values[i].toUpperCase(), 190 + i * 20); // Fill second column with values
-    }
-
-    if (signature) {
-      const signatureImageData = signature.replace(
+    // // Page 2
+    // // Add content to the second page here
+    // // doc.fontSize(24).text("Second Page Content", { align: "center" });
+    if (formData.signature) {
+      const signatureImageData = formData.signature.replace(
         /^data:image\/\w+;base64,/,
         ""
       );
       const signatureImageBuffer = Buffer.from(signatureImageData, "base64");
 
       // Adjust the positioning of the signature as necessary
-      let signaturePositionY = 700; // Example position, adjust based on your document layout
-      doc.image(signatureImageBuffer, 50, signaturePositionY, {
-        width: 100,
-        height: 50,
-      });
+      let signaturePositionY = 100; // Example position, adjust based on your document layout
+
+      
+
+      // doc.image(signatureImageBuffer, 50, signaturePositionY, {
+      //   width: 100,
+      //   height: 50,
+      // });
+      row(doc, 200); // Draw row
+      textInRowFirst(doc, "Signature", 190 + 20);
+      imageInRowSecond(doc, signatureImageBuffer, 190 + 20);
+    }
+
+    
+    for (let i = 0; i < SecondLabels.length; i++) {
+      row(doc, 190 + i * 500); // Draw row
+      textInRowFirst(doc, SecondLabels[i], 190 + i * 100); // Fill first column with labels
+    }
+
+    // Fill second column with values from formData
+    // const values = Object.values(formData);
+    for (let i = 26; i < secondArray.length; i++) {
+      textInRowSecond(doc, secondArray[i].toUpperCase(), 190 + i * 100); // Fill second column with values
     }
 
     doc.end();
@@ -207,8 +218,8 @@ function textInRowFirst(doc, text, height) {
   doc.text(text, {
     paragraphGap: 5,
     indent: 5,
-    align: "justify",
-    columns: 1,
+    align: "left",
+    columns: 2,
   });
 }
 
@@ -223,9 +234,19 @@ function textInRowSecond(doc, text, height) {
     columns: 1,
   });
 }
+function imageInRowSecond(doc, image, height) {
+
+  doc.y = height;
+  doc.x = 270; // Start from the middle line to fill the second column
+  doc.fillColor("black");
+  doc.image(image, 50, 100, {
+    width: 100,
+    height: 50,
+  });
+}
 
 function row(doc, height) {
-  doc.fillColor("grey").lineJoin("miter").rect(30, height, 500, 20).stroke();
+  doc.fillColor("grey").lineJoin("miter").rect(20, height, 550, 20).stroke();
 }
 
 module.exports = { createPDF };
