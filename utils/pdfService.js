@@ -74,10 +74,14 @@ function createPDFs(formData) {
 
 function createPDF(formData) {
   return new Promise((resolve, reject) => {
+    const { signature, ...rest } = formData;
+    // console.log(formData, "formdata")
+    // console.log(signature);
     const doc = new PDFDocument();
     const fileName = "candidate_registration_form.pdf";
     let buffers = [];
     const writeStream = fs.createWriteStream(fileName);
+
     doc.pipe(writeStream);
     doc.on("data", buffers.push.bind(buffers));
     doc.on("end", () => {
@@ -85,8 +89,6 @@ function createPDF(formData) {
       resolve(pdfData);
     });
 
-
-    
     // Add image/logo as header
     doc.image("./image/mainlogo.jpg", 50, 50, { width: 100, height: 100 });
 
@@ -104,7 +106,7 @@ function createPDF(formData) {
     });
     doc.moveDown();
 
-    doc.lineCap("butt").moveTo(270, 180).lineTo(270, 643).stroke(); // Draws a vertical line at x-coordinate 270
+    doc.lineCap("butt").moveTo(270, 180).lineTo(270, 700).stroke(); // Draws a vertical line at x-coordinate 270
 
     // Draw the table
     const labels = [
@@ -134,25 +136,34 @@ function createPDF(formData) {
       "Employment Start Date",
       "Employment End Date",
       "ReferenceEmail",
-    ];
-    const SecondLabels = [
+      
       "If Hanson Recruitment are completing a new DBS for you, it will be Child and Adult Workforce. Do you need a new DBS or do you have one (child workforce/ child & adult workforce) on the update service?",
       "Please state, if applicable, any periods of residence outside of the UK within the last 5 years and any periods of more than 6 months at any time. E.g. Spain - 10 months - Jan 2018 to October 2018",
       "If Yes Required, which country?",
+      "HealthDeclarationDate",
       "Signature",
+      
     ];
+    // const SecondLabels = [
+    //   "If Hanson Recruitment are completing a new DBS for you, it will be Child and Adult Workforce. Do you need a new DBS or do you have one (child workforce/ child & adult workforce) on the update service?",
+    //   "Please state, if applicable, any periods of residence outside of the UK within the last 5 years and any periods of more than 6 months at any time. E.g. Spain - 10 months - Jan 2018 to October 2018",
+    //   "If Yes Required, which country?",
+    //   "HealthDeclarationDate",
+    //   "Signature",
+    // ];
     for (let i = 0; i < labels.length; i++) {
       row(doc, 180 + i * 20); // Draw row
       textInRowFirst(doc, labels[i], 190 + i * 20); // Fill first column with labels
     }
 
     // Fill second column with values from formData
-    const values = Object.values(formData);
+    const values = Object.values(rest);
     for (let i = 0; i < values.length; i++) {
       textInRowSecond(doc, values[i].toUpperCase(), 190 + i * 20); // Fill second column with values
     }
+
     doc.addPage(); // Add a new page
-    doc.lineCap("butt").moveTo(270, 180).lineTo(270, 700).stroke(); // Draws a vertical line at x-coordinate 270
+    // doc.lineCap("butt").moveTo(270, 180).lineTo(270, 700).stroke(); // Draws a vertical line at x-coordinate 270
 
     // Page 2
     // Add content to the second page here
@@ -164,19 +175,25 @@ function createPDF(formData) {
 
     // Fill second column with values from formData
     // const values = Object.values(formData);
-    for (let i = 23; i < values.length; i++) {
+    for (let i = 25; i < values.length; i++) {
       textInRowSecond(doc, values[i].toUpperCase(), 190 + i * 20); // Fill second column with values
     }
 
-    if (formData.signature) {
-      const signatureImageData = formData.signature.replace(/^data:image\/\w+;base64,/, "");
-      const signatureImageBuffer = Buffer.from(signatureImageData, 'base64');
+    if (signature) {
+      const signatureImageData = signature.replace(
+        /^data:image\/\w+;base64,/,
+        ""
+      );
+      const signatureImageBuffer = Buffer.from(signatureImageData, "base64");
 
       // Adjust the positioning of the signature as necessary
       let signaturePositionY = 700; // Example position, adjust based on your document layout
-      doc.image(signatureImageBuffer, 50, signaturePositionY, { width: 100, height: 50 });
+      doc.image(signatureImageBuffer, 50, signaturePositionY, {
+        width: 100,
+        height: 50,
+      });
     }
-    
+
     doc.end();
 
     writeStream.on("finish", function () {
