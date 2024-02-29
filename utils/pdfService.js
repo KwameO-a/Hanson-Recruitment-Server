@@ -135,22 +135,18 @@ function createPDF(formData) {
       "ReferenceTitle",
       "Employment Start Date",
       "Employment End Date",
-      "ReferenceEmail",
+      "Reference Email",
       
+     
+      
+    ];
+    const SecondLabels = [
       "If Hanson Recruitment are completing a new DBS for you, it will be Child and Adult Workforce. Do you need a new DBS or do you have one (child workforce/ child & adult workforce) on the update service?",
       "Please state, if applicable, any periods of residence outside of the UK within the last 5 years and any periods of more than 6 months at any time. E.g. Spain - 10 months - Jan 2018 to October 2018",
       "If Yes Required, which country?",
       "HealthDeclarationDate",
       "Signature",
-      
     ];
-    // const SecondLabels = [
-    //   "If Hanson Recruitment are completing a new DBS for you, it will be Child and Adult Workforce. Do you need a new DBS or do you have one (child workforce/ child & adult workforce) on the update service?",
-    //   "Please state, if applicable, any periods of residence outside of the UK within the last 5 years and any periods of more than 6 months at any time. E.g. Spain - 10 months - Jan 2018 to October 2018",
-    //   "If Yes Required, which country?",
-    //   "HealthDeclarationDate",
-    //   "Signature",
-    // ];
     for (let i = 0; i < labels.length; i++) {
       row(doc, 180 + i * 20); // Draw row
       textInRowFirst(doc, labels[i], 190 + i * 20); // Fill first column with labels
