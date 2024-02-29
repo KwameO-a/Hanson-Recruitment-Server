@@ -71,7 +71,7 @@ function createPDFs(formData) {
     });
   });
 }
-const { Buffer } = require('buffer');
+
 function createPDF(formData) {
   return new Promise((resolve, reject) => {
     const { signature, ...rest } = formData;
@@ -80,20 +80,15 @@ function createPDF(formData) {
     const doc = new PDFDocument();
     const fileName = "candidate_registration_form.pdf";
     let buffers = [];
-    const signatureBuffer = Buffer.from(signature, "base64");
     const writeStream = fs.createWriteStream(fileName);
-    fs.writeFileSync('signature.png', signatureBuffer);
+
     doc.pipe(writeStream);
-    doc.image('signature.png', 20, 20, { width: 100 });
-    console.log(signatureBuffer)
     doc.on("data", buffers.push.bind(buffers));
     doc.on("end", () => {
       let pdfData = Buffer.concat(buffers);
       resolve(pdfData);
     });
 
-
-    
     // Add image/logo as header
     doc.image("./image/mainlogo.jpg", 50, 50, { width: 100, height: 100 });
 
@@ -111,7 +106,7 @@ function createPDF(formData) {
     });
     doc.moveDown();
 
-    doc.lineCap("butt").moveTo(270, 180).lineTo(270, 643).stroke(); // Draws a vertical line at x-coordinate 270
+    doc.lineCap("butt").moveTo(270, 180).lineTo(270, 700).stroke(); // Draws a vertical line at x-coordinate 270
 
     // Draw the table
     const labels = [
@@ -152,7 +147,6 @@ function createPDF(formData) {
       row(doc, 180 + i * 20); // Draw row
       textInRowFirst(doc, labels[i], 190 + i * 20); // Fill first column with labels
     }
-    
 
     // Fill second column with values from formData
     const values = Object.values(rest);
@@ -161,7 +155,7 @@ function createPDF(formData) {
     }
 
     doc.addPage(); // Add a new page
-    doc.lineCap("butt").moveTo(270, 180).lineTo(270, 700).stroke(); // Draws a vertical line at x-coordinate 270
+    // doc.lineCap("butt").moveTo(270, 180).lineTo(270, 700).stroke(); // Draws a vertical line at x-coordinate 270
 
     // Page 2
     // Add content to the second page here
@@ -173,19 +167,25 @@ function createPDF(formData) {
 
     // Fill second column with values from formData
     // const values = Object.values(formData);
-    for (let i = 23; i < values.length; i++) {
+    for (let i = 25; i < values.length; i++) {
       textInRowSecond(doc, values[i].toUpperCase(), 190 + i * 20); // Fill second column with values
     }
 
-    if (formData.signature) {
-      const signatureImageData = formData.signature.replace(/^data:image\/\w+;base64,/, "");
-      const signatureImageBuffer = Buffer.from(signatureImageData, 'base64');
+    if (signature) {
+      const signatureImageData = signature.replace(
+        /^data:image\/\w+;base64,/,
+        ""
+      );
+      const signatureImageBuffer = Buffer.from(signatureImageData, "base64");
 
       // Adjust the positioning of the signature as necessary
       let signaturePositionY = 700; // Example position, adjust based on your document layout
-      doc.image(signatureImageBuffer, 50, signaturePositionY, { width: 100, height: 50 });
+      doc.image(signatureImageBuffer, 50, signaturePositionY, {
+        width: 100,
+        height: 50,
+      });
     }
-    
+
     doc.end();
 
     writeStream.on("finish", function () {
