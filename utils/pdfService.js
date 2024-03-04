@@ -31,32 +31,57 @@ function createPDF(formData) {
     let startY = 250; // Starting Y position after header, title, and date
 
     // Labels for the form fields
-    const labels = [
-      "Title", "Legal First Name", "Legal Middle Name", "Legal Surname", "Known As", "Previous Names",
-      "Address", "PostCode", "Phone Number", "Email", "Date of Birth", "Town of Birth", "Nationality",
-      "National Insurance Number", "Gender", "Next Of Kin Name", "Relationship to you", "Next of Kin Address",
-      "Emergency Tel No", "Highest Level of Qualification", "Position", "Tel", "ReferenceTitle",
-      "Employment Start Date", "Employment End Date", "ReferenceEmail"
-    ];
+    const labelsMap ={
+     title: "Title", 
+     firstName: "Legal First Name", 
+     middleName: "Legal Middle Name", 
+     lastName: "Legal Surname",
+     knownAs: "Known As", 
+     previousNames:"Previous Names",
+     address:"Address", 
+     postCode:"PostCode", 
+     phoneNumber:"Phone Number", 
+     email:"Email",
+     dob: "Date of Birth",
+     townofBirth: "Town of Birth",
+     nationality: "Nationality",
+     nationalInsuaranceNumber:"National Insurance Number", 
+     gender:"Gender", 
+     nextofkinName:"Next Of Kin Name", 
+     relationship:"Relationship to you", 
+     nextofkinaddress:"Next of Kin Address",
+     nextofkincontact:"Emergency Tel No", 
+     qualification:"Highest Level of Qualification",
+     position: "Teaching Assistant", 
+      tel:"Tel", 
+      ReferenceTitle: "ReferenceTitle",
+      datesOfemployment:"Employment Start Date", 
+      datesOfemploymentEnd: "Employment End Date",
+      ReferenceEmail: "ReferenceEmail"
+    };
 
     // Additional labels for more detailed information
-    const SecondLabels = [
-      "If Hanson Recruitment are completing a new DBS for you, it will be Child and Adult Workforce. Do you need a new DBS or do you have one (child workforce/ child & adult workforce) on the update service?",
-      "Please state, if applicable, any periods of residence outside of the UK within the last 5 years and any periods of more than 6 months at any time. E.g. Spain - 10 months - Jan 2018 to October 2018",
-      "If Yes Required, which country?", "Signature"
-    ];
+    const SecondLabels = {
+      criminalRecordDetails:"If Hanson Recruitment are completing a new DBS for you, it will be Child and Adult Workforce. Do you need a new DBS or do you have one (child workforce/ child & adult workforce) on the update service?",
+      criminalDetails:"Please state, if applicable, any periods of residence outside of the UK within the last 5 years and any periods of more than 6 months at any time. E.g. Spain - 10 months - Jan 2018 to October 2018",
+      ConsentToCriminalRecords:"If Yes Required, which country?", 
+      signature:"Signature (Printed name) *", 
+      
+    };
 
     // Combine all labels for processing
-    const allLabels = [...labels, ...SecondLabels];
+    const allLabels = {...labelsMap, ...SecondLabels};
+    console.log(allLabels);
 
     // Draw rows for each label and value, adjusting for dynamic content
-    allLabels.forEach((label, index) => {
-      if (index === labels.length) { // Check if starting on second set of labels
+    for (const [index, label] of Object.entries(allLabels))  {
+      if (index === labelsMap.length) {
+         // Check if starting on second set of labels
         doc.addPage(); // Add a new page for the second set of labels
         startY = 50; // Reset startY position for the new page
       }
 
-      const textValue = rest[label] || "N/A"; // Retrieve the value or default to "N/A"
+      const textValue = rest[index] || "N/A"; // Retrieve the value or default to "N/A"
       const rowHeight = calculateTextHeight(doc, `${label}: ${textValue}`, 400, 10);
 
       // Ensure new page is added if content exceeds page length
@@ -68,7 +93,7 @@ function createPDF(formData) {
       // Draw the label and value, then adjust startY based on the content height
       doc.fontSize(10).fillColor('black').text(`${label}: ${textValue}`, 60, startY, { width: 400, align: "left" });
       startY += rowHeight + 10; // Increment startY for the next row
-    });
+    };
 
     // Handle the signature if present
     if (signature) {
