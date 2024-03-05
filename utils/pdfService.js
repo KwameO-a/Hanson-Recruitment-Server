@@ -39,39 +39,58 @@ function createPDF(formData) {
      knownAs: "Known As", 
      previousNames:"Previous Names",
      address:"Address", 
-     postCode:"PostCode", 
+     postCode:"Post Code", 
      phoneNumber:"Phone Number", 
      email:"Email",
-     dob: "Date of Birth",
+     dateOfBirth: "Date of Birth",
      townofBirth: "Town of Birth",
      nationality: "Nationality",
      nationalInsuaranceNumber:"National Insurance Number", 
      gender:"Gender", 
-     nextofkinName:"Next Of Kin Name", 
+     needNewDBS:"If Hanson Recruitment are completing a new DBS for you, it will be Child and Adult Workforce. Do you need a new DBS or do you have one (child workforce/ child & adult workforce) on the update service?",
+     nextofkinName:"Next of Kin Name", 
      relationship:"Relationship to you", 
      nextofkinaddress:"Next of Kin Address",
      nextofkincontact:"Emergency Tel No", 
      qualification:"Highest Level of Qualification",
-     position: "Teaching Assistant", 
-      tel:"Tel", 
-      ReferenceTitle: "ReferenceTitle",
-      datesOfemployment:"Employment Start Date", 
-      datesOfemploymentEnd: "Employment End Date",
-      ReferenceEmail: "ReferenceEmail"
+     positionOfApplicant: "Position of Applicant",
+     overseasCountries:"Please state, if applicable, any periods of residence outside of the UK within the last 5 years and any periods of more than 6 months at any time. E.g. Spain - 10 months - Jan 2018 to October 2018",
+     forename:"Reference Fore Name",
+     surname:"Reference Surname",
+     position:"Position Held at Reference",
+     company: "Company Name",
+      
+     tel:"Reference Contact", 
+     Referencetitle: "Reference Title",
+     datesOfemployment:"Employment Start Date", 
+     datesOfemploymentEnd: "Employment End Date",
+     ReferenceEmail: "Reference Email",
+     criminalDetails:"Do you have a Criminal Record?",
+     criminalRecordDetails:"If yes, please provide detail",
+     consentGiven:"Consent To Criminal Records Given by Applicant",
+     hasHealthIssue:"Do you have any health issues or disabilities relevant to the role you seek?",
+     healthInfo: "If yes, Please provide health information",
+     supportNeeds: "What level of support do you require in relation to this vacancy?" ,
+     doctorLetterProvided: "Have you provided a letter from your GP confirming  that you are fit and able for the role?",
+
+    // hasCriminalRecord:"Do you have a Criminal Record?",
     };
 
     // Additional labels for more detailed information
     const SecondLabels = {
-      criminalRecordDetails:"If Hanson Recruitment are completing a new DBS for you, it will be Child and Adult Workforce. Do you need a new DBS or do you have one (child workforce/ child & adult workforce) on the update service?",
-      criminalDetails:"Please state, if applicable, any periods of residence outside of the UK within the last 5 years and any periods of more than 6 months at any time. E.g. Spain - 10 months - Jan 2018 to October 2018",
-      ConsentToCriminalRecords:"If Yes Required, which country?", 
-      signature:"Signature (Printed name) *", 
+      
+      
+      
+       
+      signature:"Signature", 
       
     };
 
     // Combine all labels for processing
     const allLabels = {...labelsMap, ...SecondLabels};
     console.log(allLabels);
+
+    rest.signature= `\n ${rest.firstName} ${rest.middleName} ${rest.lastName}`;
 
     // Draw rows for each label and value, adjusting for dynamic content
     for (const [index, label] of Object.entries(allLabels))  {
