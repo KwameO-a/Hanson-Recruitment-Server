@@ -28,58 +28,57 @@ function createPDF(formData) {
       .fontSize(12)
       .text("Candidate Registration Form", 150, 160, { align: "center" });
     const currentDate = new Date().toLocaleString();
-    doc
-      .fontSize(10)
-      .text(`Form Response Filled: ${currentDate}`, 150, 200, {
-        align: "center",
-      });
+    doc.fontSize(10).text(`Form Response Filled: ${currentDate}`, 150, 200, {
+      align: "center",
+    });
 
     let startY = 250; // Starting Y position after header, title, and date
 
     // Labels for the form fields
-    const labelsMap ={
-     title: "Title", 
-     firstName: "Legal First Name", 
-     middleName: "Legal Middle Name", 
-     lastName: "Legal Surname",
-     knownAs: "Known As", 
-     previousNames:"Previous Names",
-     address:"Address", 
-     postCode:"PostCode", 
-     phoneNumber:"Phone Number", 
-     email:"Email",
-     dob: "Date of Birth",
-     townofBirth: "Town of Birth",
-     nationality: "Nationality",
-     nationalInsuaranceNumber:"National Insurance Number", 
-     gender:"Gender", 
-     nextofkinName:"Next Of Kin Name", 
-     relationship:"Relationship to you", 
-     nextofkinaddress:"Next of Kin Address",
-     nextofkincontact:"Emergency Tel No", 
-     qualification:"Highest Level of Qualification",
-     position: "Teaching Assistant", 
-      tel:"Tel", 
+    const labelsMap = {
+      title: "Title",
+      firstName: "Legal First Name",
+      middleName: "Legal Middle Name",
+      lastName: "Legal Surname",
+      knownAs: "Known As",
+      previousNames: "Previous Names",
+      address: "Address",
+      postCode: "PostCode",
+      phoneNumber: "Phone Number",
+      email: "Email",
+      dob: "Date of Birth",
+      townofBirth: "Town of Birth",
+      nationality: "Nationality",
+      nationalInsuaranceNumber: "National Insurance Number",
+      gender: "Gender",
+      nextofkinName: "Next Of Kin Name",
+      relationship: "Relationship to you",
+      nextofkinaddress: "Next of Kin Address",
+      nextofkincontact: "Emergency Tel No",
+      qualification: "Highest Level of Qualification",
+      position: "Teaching Assistant",
+      tel: "Tel",
       ReferenceTitle: "ReferenceTitle",
-      datesOfemployment:"Employment Start Date", 
+      datesOfemployment: "Employment Start Date",
       datesOfemploymentEnd: "Employment End Date",
-      ReferenceEmail: "ReferenceEmail"
+      ReferenceEmail: "ReferenceEmail",
     };
 
     // Additional labels for more detailed information
     const SecondLabels = {
-      criminalRecordDetails:"If Hanson Recruitment are completing a new DBS for you, it will be Child and Adult Workforce. Do you need a new DBS or do you have one (child workforce/ child & adult workforce) on the update service?",
-      criminalDetails:"Please state, if applicable, any periods of residence outside of the UK within the last 5 years and any periods of more than 6 months at any time. E.g. Spain - 10 months - Jan 2018 to October 2018",
-      ConsentToCriminalRecords:"If Yes Required, which country?", 
-      signature:"Signature (Printed name) *", 
-      
+      criminalRecordDetails:
+        "If Hanson Recruitment are completing a new DBS for you, it will be Child and Adult Workforce. Do you need a new DBS or do you have one (child workforce/ child & adult workforce) on the update service?",
+      criminalDetails:
+        "Please state, if applicable, any periods of residence outside of the UK within the last 5 years and any periods of more than 6 months at any time. E.g. Spain - 10 months - Jan 2018 to October 2018",
+      ConsentToCriminalRecords: "If Yes Required, which country?",
+      signature: "Signature (Printed name) *",
     };
 
     // Combine all labels for processing
     const allLabels = { ...labelsMap, ...SecondLabels };
     console.log(allLabels);
 
-    rest.signature= `\n ${rest.firstName} ${rest.middleName} ${rest.lastName}`;
+    rest.signature = `\n ${rest.firstName} ${rest.middleName} ${rest.lastName}`;
 
     // Draw rows for each label and value, adjusting for dynamic content
     for (const [index, label] of Object.entries(allLabels)) {
