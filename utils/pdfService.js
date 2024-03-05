@@ -56,7 +56,7 @@ function createPDF(formData) {
       nextofkinaddress: "Next of Kin Address",
       nextofkincontact: "Emergency Tel No",
       qualification: "Highest Level of Qualification",
-      position: "Teaching Assistant",
+      position: "Position",
       tel: "Tel",
       ReferenceTitle: "ReferenceTitle",
       datesOfemployment: "Employment Start Date",
@@ -78,7 +78,8 @@ function createPDF(formData) {
     const allLabels = { ...labelsMap, ...SecondLabels };
     console.log(allLabels);
 
-    rest.signature = `\n ${rest.firstName} ${rest.middleName} ${rest.lastName}`;
+    // rest.signature = `\n ${rest.firstName} ${rest.middleName} ${rest.lastName}`;
+    // rest.signature = `\n ${rest.firstName} ${rest.middleName} ${rest.lastName}`;
 
     // Draw rows for each label and value, adjusting for dynamic content
     for (const [index, label] of Object.entries(allLabels)) {
