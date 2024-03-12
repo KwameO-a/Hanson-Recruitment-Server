@@ -67,11 +67,30 @@ function createPDF(formData) {
      ReferenceEmail: "Reference Email",
      criminalDetails:"Do you have a Criminal Record?",
      criminalRecordDetails:"If yes, please provide detail",
-     consentGiven:"Consent To Criminal Records Given by Applicant",
+     CriminalConsentGiven:"Consent To Criminal Records Given by Applicant",
+     CriminalDate:"Criminal Consent Date",
      hasHealthIssue:"Do you have any health issues or disabilities relevant to the role you seek?",
      healthInfo: "If yes, Please provide health information",
      supportNeeds: "What level of support do you require in relation to this vacancy?" ,
      doctorLetterProvided: "Have you provided a letter from your GP confirming  that you are fit and able for the role?",
+     HealthConsentGiven:" Consent  To Health Information Given by Applicant" ,
+     HealthDeclarationDate: "Health Declaration Date" ,
+     DisclosureConsentGiven:  "Candidate Declaration Consent",
+     DisclosureConsentDate:   "Disclosure Consent Date",
+
+
+     excludedCounties:"As part of our commitment to comply with GDPR, we require your consent to process your personal data. Please indicate your preferences below. Counties you do NOT wish your details to be shared with ",
+     excludedProvisions:"Provisions you do NOT wish your details shared with",
+     emailMarketing:"wish to be sent email marketing information",
+     mailMarketing:"wish to be sent Mail marketing information",
+     smsMarketing:"wish to be sent SMS marketing information",
+     consentGiven: "I give my consent to the above being processed",
+     GDPRdate:"GDPR Date",
+
+     question1:"Do you have any convictions or adult cautions that are unspent?",
+     question1_detail:"if yes provide details",
+     question2:"Do you have",
+     question2_detail:"if yes"
 
     // hasCriminalRecord:"Do you have a Criminal Record?",
     };
@@ -88,9 +107,9 @@ function createPDF(formData) {
 
     // Combine all labels for processing
     const allLabels = {...labelsMap, ...SecondLabels};
-    console.log(allLabels);
+    // console.log(allLabels);
 
-    rest.signature= `\n ${rest.firstName} ${rest.middleName} ${rest.lastName}`;
+    rest.signature= `${rest.firstName} ${rest.middleName} ${rest.lastName}`;
 
     // Draw rows for each label and value, adjusting for dynamic content
     for (const [index, label] of Object.entries(allLabels))  {
