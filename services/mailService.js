@@ -33,9 +33,9 @@ let transporter = nodemailer.createTransport({
 async function sendEmail(attachments, formData, callback) {
   const mailOptions = {
     from: "noreply@example.com", // Sender address
-    to: formData?.email, // List of recipients
-    subject: `Job Application: ${formData.title} ${formData.lastName} ${formData.firstName} - ${formData.positionOfApplicant}`, // Subject line
-    text: `Please find attached my application for the ${formData.positionOfApplicant} position at Hanson Recruitment. The attached PDF contains all the necessary details regarding my qualifications and experiences.`, // Plain text body
+    to: "hubertamarfio@gmail.com", // List of recipients
+    subject: `Job Application: ${formData.title} ${formData.lastName} ${formData.firstName} - ${formData.RoleApplyingFor}`, // Subject line
+    text: `Please find attached my application for the ${formData.RoleApplyingFor} position at Hanson Recruitment. The attached PDF contains all the necessary details regarding my qualifications and experiences.`, // Plain text body
     attachments: attachments
   };
 
