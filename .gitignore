@@ -22,3 +22,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# generated at runtime by utils/pdfService.js; contains applicant personal data
+candidate_registration_form.pdf

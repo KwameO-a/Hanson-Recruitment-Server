@@ -1,16 +1,7 @@
 // mailService.js
 const nodemailer = require("nodemailer");
 require('dotenv').config()
-// Set up your SMTP server settings
-// const transporter = nodemailer.createTransport({
-//   host: 'smtp.example.com', // Your SMTP server host
-//   port: 587,                // Your SMTP server port; 587 is common for non-SSL connections
-//   secure: false,            // True for 465 (SSL), false for other ports
-//   auth: {
-//     user: 'hubertamarfio@gmail.com', // Your email address
-//     pass: 'AmArFiO123456',          // Your email password
-//   },
-// });
+// SMTP credentials come from the environment (see README); never commit them
 let transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   service: "gmail",
